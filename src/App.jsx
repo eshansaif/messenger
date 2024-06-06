@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import ChatList from "./components/ChatList";
+import ChatWindow from "./components/ChatWindow";
+import MessageInput from "./components/MessageInput";
+import UserProfile from "./components/UserProfile";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [chats, setChats] = useState([
+    {
+      id: 1,
+      name: "John Doe",
+      avatar: "path/to/avatar.jpg",
+      lastMessage: "Hey there!",
+      messages: [
+        { sender: "John", text: "Hey there!" },
+        { sender: "me", text: "Hello!" },
+      ],
+    },
+    {
+      id: 2,
+      name: "Shabiha Shabnam",
+      avatar:
+        "https://media.licdn.com/dms/image/D5635AQG8C5wVlMhmSw/profile-framedphoto-shrink_800_800/0/1690135180346?e=1718301600&v=beta&t=vUI8ZHr1JTDaIRMmFGDJYG5W0Pzu2n4bG2t6BtzlK7s",
+      lastMessage: "Hey there!",
+      messages: [
+        { sender: "John", text: "Hey there!" },
+        { sender: "me", text: "Hello!" },
+      ],
+    },
+    // More chats...
+  ]);
+
+  const [selectedChat, setSelectedChat] = useState(chats[0]);
+  const user = {
+    name: "Jane Smith",
+    avatar: "path/to/avatar.jpg",
+    status: "Online",
+  };
+
+  const handleSendMessage = (message) => {
+    const updatedChat = {
+      ...selectedChat,
+      messages: [...selectedChat.messages, { sender: "me", text: message }],
+    };
+    setSelectedChat(updatedChat);
+    setChats(
+      chats.map((chat) => (chat.id === selectedChat.id ? updatedChat : chat))
+    );
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="flex h-screen">
+      <div className="w-1/4">
+        <UserProfile user={user} />
+        <ChatList chats={chats} onSelectChat={setSelectedChat} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className="flex flex-col flex-1">
+        <ChatWindow chat={selectedChat} />
+        <MessageInput onSendMessage={handleSendMessage} />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default App
+export default App;
