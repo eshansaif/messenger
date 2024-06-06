@@ -15,7 +15,7 @@ const ChatList = ({ chats, onSelectChat }) => {
             className="w-12 h-12 rounded-full mr-4"
           />
           <div>
-            <h4 className="font-semibold">{chat.name}</h4>
+            <h4 className="font-semibold hidden md:block">{chat.name}</h4>
             <p className="text-sm text-gray-600">{chat.lastMessage}</p>
           </div>
         </div>
